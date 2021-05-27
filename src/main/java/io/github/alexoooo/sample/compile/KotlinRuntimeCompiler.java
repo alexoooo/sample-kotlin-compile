@@ -45,11 +45,13 @@ public class KotlinRuntimeCompiler
 
     //-----------------------------------------------------------------------------------------------------------------
     private final Path workDir;
+    private final boolean dispose;
 
 
     //-----------------------------------------------------------------------------------------------------------------
-    public KotlinRuntimeCompiler(Path workDir) {
+    public KotlinRuntimeCompiler(Path workDir, boolean dispose) {
         this.workDir = workDir;
+        this.dispose = dispose;
     }
 
 
@@ -120,14 +122,17 @@ public class KotlinRuntimeCompiler
         CompilerConfiguration configuration = configureCompiler(
                 moduleName, sourcePaths, saveClassesDir, classLoader, errorStream);
 
-        StubDisposable noopDisposable = new StubDisposable();
+        ParentDisposable parentDisposable = new ParentDisposable();
         KotlinCoreEnvironment env = KotlinCoreEnvironment.createForProduction(
-                noopDisposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
-
+                parentDisposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
         GenerationState result = KotlinToJVMBytecodeCompiler.INSTANCE.analyzeAndGenerate(env);
-        errorStream.flush();
 
-        Disposer.dispose(noopDisposable);
+        if (dispose) {
+            Disposer.dispose(parentDisposable);
+            KotlinCoreEnvironment.Companion.disposeApplicationEnvironment();
+        }
+
+        errorStream.flush();
 
         if (result != null) {
             return Optional.empty();
@@ -182,7 +187,7 @@ public class KotlinRuntimeCompiler
 
 
     //-----------------------------------------------------------------------------------------------------------------
-    private static class StubDisposable implements Disposable {
+    private static class ParentDisposable implements Disposable {
         @Override
         public void dispose() {
         }

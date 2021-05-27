@@ -4,13 +4,14 @@ import java.nio.file.Paths;
 
 
 public class Main {
+    private static final boolean dispose = false;
     private static final String className = "Codegen";
     private static long previousUsedMemory = 0;
 
 
     public static void main(String[] args) {
         KotlinRuntimeCompiler compiler = new KotlinRuntimeCompiler(
-                Paths.get("target/codegen"));
+                Paths.get("target/codegen"), dispose);
 
         for (int i = 0; i < 10_000; i++) {
             printStatus(i);
