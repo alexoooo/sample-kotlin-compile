@@ -33,28 +33,28 @@ public enum Utils {;
     }
 
 
-    public static void deleteDir(Path dir)
-    {
-        if (! Files.exists(dir)) {
-            return;
-        }
-
-        try {
-            List<Path> contentsInOrder = Files
-                .walk(dir)
-                .sorted(Comparator.reverseOrder())
-                .toList();
-
-            for (Path next : contentsInOrder) {
-                Files.delete(next);
-            }
-        }
-        catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-
-        if (Files.exists(dir)) {
-            throw new IllegalStateException("Unable to delete: " + dir);
-        }
-    }
+//    public static void deleteDir(Path dir)
+//    {
+//        if (! Files.exists(dir)) {
+//            return;
+//        }
+//
+//        try {
+//            List<Path> contentsInOrder = Files
+//                .walk(dir)
+//                .sorted(Comparator.reverseOrder())
+//                .toList();
+//
+//            for (Path next : contentsInOrder) {
+//                Files.delete(next);
+//            }
+//        }
+//        catch (IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//
+//        if (Files.exists(dir)) {
+//            throw new IllegalStateException("Unable to delete: " + dir);
+//        }
+//    }
 }
