@@ -21,7 +21,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10_000; i++) {
+        for (int i = 0; i < 1_000; i++) {
             printStatus(i);
 
             int value = Integer.parseInt(execute(
