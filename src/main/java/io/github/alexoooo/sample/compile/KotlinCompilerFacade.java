@@ -11,6 +11,7 @@ import kotlin.script.experimental.host.StringScriptSource;
 import kotlin.script.experimental.jvm.*;
 import kotlin.script.experimental.jvmhost.CompiledScriptJarsCache;
 import kotlin.script.experimental.util.PropertiesCollection;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.scripting.compiler.plugin.impl.ScriptJvmCompilerIsolated;
 
 import java.io.File;
@@ -100,38 +101,36 @@ public enum KotlinCompilerFacade
             throw new UncheckedIOException(e);
         }
 
+        ScriptingHostConfiguration scriptingHostConfiguration = scriptingHostConfiguration(jarFile);
+
+        properties.set(scriptingHostConfigurationKey, scriptingHostConfiguration);
+    }
+
+
+    private static @NotNull ScriptingHostConfiguration scriptingHostConfiguration(Path jarFile) {
         File cacheFile = jarFile.toFile();
 
-        ScriptingHostConfiguration scriptingHostConfiguration = new ScriptingHostConfiguration(
+        return new ScriptingHostConfiguration(
                 new ScriptingHostConfiguration[] {
                         JvmScriptingHostConfigurationKt.getDefaultJvmScriptingHostConfiguration()
                 },
                 scriptHostConfigurationBuilder -> {
-                    @SuppressWarnings("ConstantConditions")
-                    PropertiesCollection.Builder scriptHostConfigurationBuilderProperties =
-                            (PropertiesCollection.Builder) (Object) scriptHostConfigurationBuilder;
-
                     JvmScriptingHostConfigurationBuilder jvmScriptingHostConfigurationBuilder =
                             JvmScriptingHostConfigurationKt.getJvm(scriptHostConfigurationBuilder);
 
                     PropertiesCollection.Key<CompiledJvmScriptsCache> compiledJvmScriptsCacheKey =
                             JvmScriptCachingKt.getCompilationCache(jvmScriptingHostConfigurationBuilder);
 
-                    @SuppressWarnings("ConstantConditions")
-                    PropertiesCollection.Builder jvmScriptingHostConfigurationBuilderProperties =
-                            (PropertiesCollection.Builder) (Object) jvmScriptingHostConfigurationBuilder;
-
-                    jvmScriptingHostConfigurationBuilderProperties.set(
+                    jvmScriptingHostConfigurationBuilder.set(
                             compiledJvmScriptsCacheKey,
                             new CompiledScriptJarsCache((sourceCode, scriptCompilationConfiguration) ->
                                     cacheFile));
 
-                    scriptHostConfigurationBuilderProperties.getData().putAll(
-                            jvmScriptingHostConfigurationBuilderProperties.getData());
+                    scriptHostConfigurationBuilder.getData().putAll(
+                            jvmScriptingHostConfigurationBuilder.getData());
 
                     return Unit.INSTANCE;
-                });
-
-        properties.set(scriptingHostConfigurationKey, scriptingHostConfiguration);
+                }
+        );
     }
 }

@@ -56,18 +56,6 @@ public class Main {
     }
 
 
-    private static String generateSampleCode() {
-        String logic = "1 + 1";
-
-        return "import java.util.function.Supplier\n" +
-                "class " + className + ": Supplier<Int> {\n" +
-                "    override fun get(): Int = run {\n" +
-                        logic + "\n" +
-                "    }\n" +
-                "}";
-    }
-
-
     private static <T> T execute(String logic) {
         try {
             return executeChecked(logic);
@@ -79,6 +67,7 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
 
     private static <T> T executeChecked(String logic) throws Exception
     {
