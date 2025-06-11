@@ -71,15 +71,15 @@ public enum KotlinCompilerFacade
             ClassLoader classLoader,
             Path jarFile
     ) {
-        @SuppressWarnings("ConstantConditions")
-        PropertiesCollection.Builder properties = (PropertiesCollection.Builder) (Object) builder;
+//        @SuppressWarnings("ConstantConditions")
+//        PropertiesCollection.Builder properties = builder;
 
         JvmScriptCompilationConfigurationBuilder jvmScriptCompilationConfigurationBuilder =
                 JvmScriptCompilationKt.getJvm(builder);
 
-        @SuppressWarnings("ConstantConditions")
-        PropertiesCollection.Builder jvmScriptCompilationConfigurationBuilderProperties =
-                (PropertiesCollection.Builder) (Object) jvmScriptCompilationConfigurationBuilder;
+//        @SuppressWarnings("ConstantConditions")
+//        PropertiesCollection.Builder jvmScriptCompilationConfigurationBuilderProperties =
+//                (PropertiesCollection.Builder) (Object) jvmScriptCompilationConfigurationBuilder;
 
         JvmScriptCompilationKt.dependenciesFromClassloader(
                 jvmScriptCompilationConfigurationBuilder,
@@ -89,7 +89,7 @@ public enum KotlinCompilerFacade
                 false
         );
 
-        properties.getData().putAll(jvmScriptCompilationConfigurationBuilderProperties.getData());
+        builder.getData().putAll(jvmScriptCompilationConfigurationBuilder.getData());
 
         PropertiesCollection.Key<ScriptingHostConfiguration> scriptingHostConfigurationKey =
                 ScriptCompilationKt.getHostConfiguration(builder);
@@ -103,7 +103,7 @@ public enum KotlinCompilerFacade
 
         ScriptingHostConfiguration scriptingHostConfiguration = scriptingHostConfiguration(jarFile);
 
-        properties.set(scriptingHostConfigurationKey, scriptingHostConfiguration);
+        builder.set(scriptingHostConfigurationKey, scriptingHostConfiguration);
     }
 
 
