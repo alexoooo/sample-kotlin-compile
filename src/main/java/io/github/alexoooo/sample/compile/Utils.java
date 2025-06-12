@@ -92,4 +92,34 @@ public enum Utils {;
             return Arrays.asList(cp.split("\\s+"));
         }
     }
+
+
+    //-----------------------------------------------------------------------------------------------------------------
+    public static class RuntimeStatus {
+        private long previousUsedMemory = 0;
+        private long previousTime = System.currentTimeMillis();
+        private int previousInvocation = 0;
+
+
+        public void printStatus() {
+            Runtime runtime = Runtime.getRuntime();
+
+            long totalMemory = runtime.totalMemory();
+            long freeMemory = runtime.freeMemory();
+            long usedMemory = totalMemory - freeMemory;
+
+            long delta = usedMemory - previousUsedMemory;
+            previousUsedMemory = usedMemory;
+
+            long time = System.currentTimeMillis();
+            long duration = time - previousTime;
+            previousTime = time;
+
+            int invocation = previousInvocation++;
+            System.out.println("invocation = " + invocation +
+                    " / used memory = " + usedMemory +
+                    " / delta = " + delta +
+                    " / time = " + duration);
+        }
+    }
 }
