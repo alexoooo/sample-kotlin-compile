@@ -12,7 +12,8 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+// TODO: compiling produces warnings such as the following, they appear to be harmless but not sure what they mean:
+//  KotlinCompilerFacade.java: unknown enum constant kotlin.annotation.AnnotationTarget.FIELD
 public enum KotlinCompilerFacade {;
     //-----------------------------------------------------------------------------------------------------------------
     public record Result(
@@ -63,7 +64,7 @@ public enum KotlinCompilerFacade {;
                 .collect(Collectors.joining(File.pathSeparator));
         cliArgs.setClasspath(classPathArg);
 
-        cliArgs.setNoReflect(true);
+//        cliArgs.setNoReflect(true);
 
         List<String> freeArgs = List.of(sourceFileArg);
         cliArgs.setFreeArgs(freeArgs);
