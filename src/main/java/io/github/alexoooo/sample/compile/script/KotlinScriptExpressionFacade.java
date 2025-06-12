@@ -1,28 +1,22 @@
-package io.github.alexoooo.sample.compile;
+package io.github.alexoooo.sample.compile.script;
 
+import io.github.alexoooo.sample.compile.KotlinExpressionUtils;
 import kotlin.script.experimental.api.ScriptDiagnostic;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 
-public enum KotlinExpressionFacade {;
+public enum KotlinScriptExpressionFacade {;
     //-----------------------------------------------------------------------------------------------------------------
-    private static final String hashName = "SHA3-256";
-
     private static final String className = "Codegen";
-    private static final String nestedClassName = KotlinCompilerFacade.classNamePrefix + className;
+    private static final String nestedClassName = KotlinScriptFacade.classNamePrefix + className;
 
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -41,12 +35,12 @@ public enum KotlinExpressionFacade {;
 
     private static Object executeChecked(String logic) throws Exception
     {
-        String sourceCode = generateSupplier(logic);
-        String digest = hash(sourceCode);
+        String sourceCode = KotlinExpressionUtils.generateSupplier(logic, className);
+        String digest = KotlinExpressionUtils.hash(sourceCode);
 
         Path jarFile = Path.of(".cache", className + "_" + digest + ".jar");
 
-        List<ScriptDiagnostic> diagnostics = KotlinCompilerFacade.compileScriptToJarFile(
+        List<ScriptDiagnostic> diagnostics = KotlinScriptFacade.compileScriptToJarFile(
                 sourceCode,
                 Thread.currentThread().getContextClassLoader(),
                 jarFile);
@@ -68,33 +62,5 @@ public enum KotlinExpressionFacade {;
         finally {
             Files.delete(jarFile);
         }
-    }
-
-
-    private static String generateSupplier(String logic) {
-        return "import java.util.function.Supplier\n" +
-                "class " + className + ": Supplier<Any> {\n" +
-                "    override fun get(): Any = run {\n" +
-                logic + "\n" +
-                "    }\n" +
-                "}";
-    }
-
-
-    //-----------------------------------------------------------------------------------------------------------------
-    private static String hash(String text)
-    {
-        MessageDigest digest;
-        try {
-            digest = MessageDigest.getInstance(hashName);
-        }
-        catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        }
-
-        byte[] encodedHash = digest.digest(
-                text.getBytes(StandardCharsets.UTF_8));
-
-        return new BigInteger(1, encodedHash).toString(16);
     }
 }

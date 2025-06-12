@@ -10,7 +10,10 @@
 
 
     <properties>
+        <!-- TODO: make it tests work with 2.x-->
         <kotlin.version>2.1.21</kotlin.version>
+        <!--<kotlin.version>1.9.25</kotlin.version>-->
+
         <junit.version>5.13.1</junit.version>
         <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
@@ -46,6 +49,11 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-scripting-jvm-host</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler-embeddable</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>

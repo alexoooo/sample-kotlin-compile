@@ -1,4 +1,4 @@
-package io.github.alexoooo.sample.compile;
+package io.github.alexoooo.sample.compile.script;
 
 import kotlin.Unit;
 import kotlin.jvm.JvmClassMappingKt;
@@ -23,14 +23,14 @@ import java.util.List;
 
 
 @KotlinScript
-public enum KotlinCompilerFacade
+public enum KotlinScriptFacade
 {;
     //-----------------------------------------------------------------------------------------------------------------
     public static final String classNamePrefix = "Script$";
 
 
     private static final KotlinType baseClassType = new KotlinType(
-            JvmClassMappingKt.getKotlinClass(KotlinCompilerFacade.class));
+            JvmClassMappingKt.getKotlinClass(KotlinScriptFacade.class));
 
     private static final KClass<?> contextClass =
             JvmClassMappingKt.getKotlinClass(ScriptCompilationConfiguration.class);
@@ -55,10 +55,10 @@ public enum KotlinCompilerFacade
 
         SourceCode sourceCodeModel = new StringScriptSource(sourceCode, null);
 
-        ScriptJvmCompilerIsolated scriptCompilerProxy = new ScriptJvmCompilerIsolated(
+        ScriptJvmCompilerIsolated scriptJvmCompilerIsolated = new ScriptJvmCompilerIsolated(
                 JvmScriptingHostConfigurationKt.getDefaultJvmScriptingHostConfiguration());
 
-        ResultWithDiagnostics<CompiledScript> result = scriptCompilerProxy.compile(
+        ResultWithDiagnostics<CompiledScript> result = scriptJvmCompilerIsolated.compile(
                 sourceCodeModel, scriptCompilationConfiguration);
 
         return result.getReports();
@@ -71,15 +71,8 @@ public enum KotlinCompilerFacade
             ClassLoader classLoader,
             Path jarFile
     ) {
-//        @SuppressWarnings("ConstantConditions")
-//        PropertiesCollection.Builder properties = builder;
-
         JvmScriptCompilationConfigurationBuilder jvmScriptCompilationConfigurationBuilder =
                 JvmScriptCompilationKt.getJvm(builder);
-
-//        @SuppressWarnings("ConstantConditions")
-//        PropertiesCollection.Builder jvmScriptCompilationConfigurationBuilderProperties =
-//                (PropertiesCollection.Builder) (Object) jvmScriptCompilationConfigurationBuilder;
 
         JvmScriptCompilationKt.dependenciesFromClassloader(
                 jvmScriptCompilationConfigurationBuilder,
