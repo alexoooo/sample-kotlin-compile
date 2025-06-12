@@ -1,20 +1,18 @@
 package io.github.alexoooo.sample.compile;
 
 
-import io.github.alexoooo.sample.compile.compiler.KotlinCompilerExpressionFacade;
-import io.github.alexoooo.sample.compile.script.KotlinScriptExpressionFacade;
-
 public class Main {
+    //-----------------------------------------------------------------------------------------------------------------
     private static long previousUsedMemory = 0;
     private static long previousTime = System.currentTimeMillis();
 
 
+    //-----------------------------------------------------------------------------------------------------------------
     public static void main(String[] args) {
         for (int i = 0; i < 1_000; i++) {
             printStatus(i);
 
-//            int value = Integer.parseInt(KotlinScriptExpressionFacade.execute(
-            int value = Integer.parseInt(KotlinCompilerExpressionFacade.execute(
+            int value = Integer.parseInt(KotlinExpressionFacade.execute(
                     "0 + " + i
             ).toString());
 
@@ -25,6 +23,7 @@ public class Main {
     }
 
 
+    //-----------------------------------------------------------------------------------------------------------------
     private static void printStatus(int index) {
         Runtime runtime = Runtime.getRuntime();
 

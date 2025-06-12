@@ -10,9 +10,7 @@
 
 
     <properties>
-        <!-- TODO: make it tests work with 2.x-->
         <kotlin.version>2.1.21</kotlin.version>
-        <!--<kotlin.version>1.9.25</kotlin.version>-->
 
         <junit.version>5.13.1</junit.version>
         <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
@@ -43,28 +41,14 @@
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-scripting-jvm</artifactId>
+            <artifactId>kotlin-compiler</artifactId>
             <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-scripting-jvm-host</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-compiler-embeddable</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-scripting-compiler-embeddable</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-reflect</artifactId>
-            <version>${kotlin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-reflect</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

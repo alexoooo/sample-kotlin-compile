@@ -1,6 +1,4 @@
-package io.github.alexoooo.sample.compile.compiler;
-
-import io.github.alexoooo.sample.compile.KotlinExpressionUtils;
+package io.github.alexoooo.sample.compile;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -14,9 +12,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 
-public enum KotlinCompilerExpressionFacade {;
+public enum KotlinExpressionFacade {;
     //-----------------------------------------------------------------------------------------------------------------
-    private static final String className = "Codegen";
+    private static final String classNameBase = "KotlinExpressionFacade";
 
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -42,10 +40,11 @@ public enum KotlinCompilerExpressionFacade {;
                 InstantiationException,
                 IllegalAccessException
     {
-        String sourceCode = KotlinExpressionUtils.generateSupplier(logic, className);
-        String digest = KotlinExpressionUtils.hash(sourceCode);
+        String logicDigest = Utils.hash(logic);
+        String className = classNameBase + "_" + logicDigest;
+        String sourceCode = generateSupplier(logic, className);
 
-        Path sourceFile = Path.of(".cache", className + "_" + digest + ".kt");
+        Path sourceFile = Path.of(".cache", className + ".kt");
         Files.createDirectories(sourceFile.getParent());
         Files.write(
                 sourceFile,
@@ -53,9 +52,9 @@ public enum KotlinCompilerExpressionFacade {;
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING);
 
-        Path jarFile = Path.of(".cache", className + "_" + digest + ".jar");
+        Path jarFile = Path.of(".cache", className + ".jar");
 
-        List<Path> currentClassPath = KotlinExpressionUtils.currentClassPath();
+        List<Path> currentClassPath = Utils.currentClassPath();
 
         KotlinCompilerFacade.Result result = KotlinCompilerFacade.compile(sourceFile, jarFile, currentClassPath);
 
@@ -77,5 +76,16 @@ public enum KotlinCompilerExpressionFacade {;
             Files.deleteIfExists(jarFile);
             Files.deleteIfExists(sourceFile);
         }
+    }
+
+
+    //-----------------------------------------------------------------------------------------------------------------
+    private static String generateSupplier(String logic, String className) {
+        return "import java.util.function.Supplier\n" +
+                "class " + className + ": Supplier<Any> {\n" +
+                "    override fun get(): Any = run {\n" +
+                logic + "\n" +
+                "    }\n" +
+                "}";
     }
 }

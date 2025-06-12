@@ -1,7 +1,5 @@
 package io.github.alexoooo.sample.compile;
 
-import io.github.alexoooo.sample.compile.compiler.KotlinCompilerFacade;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -18,20 +16,9 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 
-public enum KotlinExpressionUtils {;
+public enum Utils {;
     //-----------------------------------------------------------------------------------------------------------------
     private static final String hashName = "SHA3-256";
-
-
-    //-----------------------------------------------------------------------------------------------------------------
-    public static String generateSupplier(String logic, String supplierClassName) {
-        return "import java.util.function.Supplier\n" +
-                "class " + supplierClassName + ": Supplier<Any> {\n" +
-                "    override fun get(): Any = run {\n" +
-                logic + "\n" +
-                "    }\n" +
-                "}";
-    }
 
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -87,7 +74,7 @@ public enum KotlinExpressionUtils {;
     }
 
     private static List<String> jarManifestClassPathChecked() throws IOException, URISyntaxException {
-        URL jarUrl = KotlinExpressionUtils.class
+        URL jarUrl = Utils.class
                 .getProtectionDomain()
                 .getCodeSource()
                 .getLocation();

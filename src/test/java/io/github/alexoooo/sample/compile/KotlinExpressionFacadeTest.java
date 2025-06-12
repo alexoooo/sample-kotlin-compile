@@ -1,7 +1,6 @@
 package io.github.alexoooo.sample.compile;
 
 
-import io.github.alexoooo.sample.compile.compiler.KotlinCompilerExpressionFacade;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,8 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KotlinExpressionFacadeTest {
     @Test
     public void onePlusOneEqualsTwo() {
-//        int onePlusOne = Integer.parseInt(KotlinExpressionFacade.execute(
-        int onePlusOne = Integer.parseInt(KotlinCompilerExpressionFacade.execute(
+        int onePlusOne = Integer.parseInt(KotlinExpressionFacade.execute(
                 "1 + 1"
         ).toString());
 
@@ -23,6 +21,6 @@ public class KotlinExpressionFacadeTest {
     public void malformedExpression() {
         assertThrows(
                 RuntimeException.class,
-                () -> KotlinCompilerExpressionFacade.execute("1 + \"1\""));
+                () -> KotlinExpressionFacade.execute("1 + \"1\""));
     }
 }
