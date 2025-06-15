@@ -64,6 +64,7 @@
                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
                     <excludeTransitive>false</excludeTransitive>
                     <stripVersion>false</stripVersion>
+                    <includeScope>runtime</includeScope>
                 </configuration>
                 <executions>
                     <execution>
